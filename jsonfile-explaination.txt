@@ -1,0 +1,166 @@
+# Explanation of the Reflection Tree (JSON Structure)
+
+This JSON file represents a **deterministic decision tree** used to guide an employee through a structured daily reflection process.
+
+The tree is composed of multiple nodes, where each node represents a step in the conversation. The flow moves from one node to another based on predefined rules.
+
+---
+
+## 1. Overall Structure
+
+The file contains a list of nodes:
+
+* Each node has a unique `id`
+* Each node has a `type` (such as question, decision, reflection, etc.)
+* Each node may contain:
+
+  * `text` → what is shown to the user
+  * `options` → choices (for question nodes)
+  * `next` → next node in sequence
+  * `condition` → branching logic (for decision nodes)
+
+This structure ensures that the entire conversation is **fully defined in data**, without any hardcoded logic.
+
+---
+
+## 2. Node Types Used
+
+The tree uses different node types to control the flow:
+
+### Start Node
+
+The session begins with a greeting and automatically moves to the first question.
+
+### Question Nodes
+
+These nodes ask the user a question and provide fixed options.
+The user selects one option, which determines the next step.
+
+### Decision Nodes
+
+These nodes are not visible to the user.
+They route the flow based on the previous answer using a condition map.
+
+### Reflection Nodes
+
+These nodes provide insights or feedback based on the user’s choices.
+They help the user understand their behavior without judging them.
+
+### Bridge Nodes
+
+These nodes connect different sections (axes) of the reflection.
+They help smoothly transition from one theme to another.
+
+### Summary Node
+
+This node provides a final reflection of the user’s overall behavior and mindset.
+
+### End Node
+
+This node closes the session.
+
+---
+
+## 3. Flow of the Tree
+
+The reflection is divided into three main sections (axes):
+
+---
+
+### Axis 1: Responsibility (Locus of Control)
+
+The system starts by asking how the user's day was.
+Based on the answer, it explores how the user handled situations:
+
+* If the user reports a positive day → focuses on what went well
+* If the day was difficult → focuses on how the user reacted
+
+A reflection is then shown to highlight whether the user took control or reacted passively.
+
+---
+
+### Axis 2: Contribution vs Expectation
+
+After the first reflection, the system shifts focus to contribution:
+
+* It asks what the user contributed during the day
+* Then explores whether the user helped others or expected something in return
+
+Based on answers:
+
+* Contribution path → positive growth reflection
+* Expectation path → highlights frustration mindset
+
+---
+
+### Axis 3: Thinking Scope (Self vs Others)
+
+The final section focuses on perspective:
+
+* Whether the user focused only on themselves
+* Or considered team, colleagues, or customers
+
+The system then provides reflections encouraging broader thinking and awareness.
+
+---
+
+## 4. Deterministic Behavior
+
+The tree is fully deterministic:
+
+* Every answer maps to a predefined next node
+* There is no randomness
+* No AI or external logic is used at runtime
+
+This ensures:
+
+* Consistency
+* Predictability
+* Easy testing and debugging
+
+---
+
+## 5. Example of Branching
+
+For example:
+
+* If the user selects **“Tough”** for their day
+  → the system routes to a question about handling problems
+
+* If the user selects **“Productive”**
+  → the system routes to a question about what worked well
+
+This branching is handled through `decision` nodes.
+
+---
+
+## 6. Purpose of the Design
+
+The goal of this tree is not to judge the user, but to:
+
+* Encourage self-awareness
+* Highlight behavior patterns
+* Guide the user toward better thinking
+
+Each reflection is written in a supportive and non-judgmental tone.
+
+---
+
+## 7. Key Advantage
+
+This JSON-based design separates:
+
+* **Data (tree structure)**
+* **Execution (agent program)**
+
+This makes the system:
+
+* Flexible
+* Scalable
+* Easy to modify without changing code
+
+---
+
+## Conclusion
+
+This JSON file defines a complete reflection system using structured logic. It demonstrates how a guided thinking process can be built using a deterministic decision tree, without relying on AI at runtime.
