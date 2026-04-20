@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Daily Reflection</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+   
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      animation: float 10s infinite ease-in-out;
+    }
+
+    .bubble:nth-child(1) { width: 100px; height: 100px; left: 10%; top: 20%; }
+    .bubble:nth-child(2) { width: 150px; height: 150px; left: 70%; top: 60%; }
+    .bubble:nth-child(3) { width: 80px; height: 80px; left: 40%; top: 80%; }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-30px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .card {
+      backdrop-filter: blur(20px);
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 30px;
+      width: 420px;
+      text-align: center;
+      color: white;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      animation: fadeIn 0.6s ease;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 500;
+      animation: slideUp 0.5s ease;
+    }
+
+    .option {
+      padding: 12px;
+      margin: 8px 0;
+      border-radius: 10px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.15);
+      transition: 0.3s;
+    }
+
+    .option:hover {
+      background: rgba(255,255,255,0.3);
+      transform: translateY(-3px);
+    }
+
+    .continue-btn {
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 10px;
+      background: #00c6ff;
+      border: none;
+      color: white;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s;
+    }
+
+    .continue-btn:hover {
+      background: #009ec3;
+      transform: scale(1.05);
+    }
+
+    .progress {
+      height: 6px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #00c6ff;
+      transition: width 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity:0; transform: scale(0.9);}
+      to {opacity:1; transform: scale(1);}
+    }
+
+    @keyframes slideUp {
+      from {opacity:0; transform: translateY(20px);}
+      to {opacity:1; transform: translateY(0);}
+    }
+
+    .summary {
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+
+<div class="card">
+  <div class="progress">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <h2 id="text"></h2>
+  <div id="options"></div>
+</div>
+
+<script>
+let nodes = {};
+let current = "START";
+let lastAnswer = null;
+let state = {};
+let step = 0;
+
+fetch("reflection-tree.json")
+  .then(res => res.json())
+  .then(data => {
+    data.nodes.forEach(n => nodes[n.id] = n);
+    render();
+  });
+
+function render() {
+  let node = nodes[current];
+  let textDiv = document.getElementById("text");
+  let optionsDiv = document.getElementById("options");
+  let progressBar = document.getElementById("progress");
+
+  optionsDiv.innerHTML = "";
+
+  if (node.text) {
+    textDiv.innerText = node.text;
+  }
+
+  step++;
+  progressBar.style.width = Math.min(step * 5, 100) + "%";
+
+  
+  if (node.type === "question") {
+    node.options.forEach(opt => {
+      let div = document.createElement("div");
+      div.className = "option";
+      div.innerText = opt;
+
+      div.onclick = () => {
+        state[current] = opt;
+        lastAnswer = opt;
+        current = node.next;
+        render();
+      };
+
+      optionsDiv.appendChild(div);
+    });
+  }
+
+  
+  else if (node.type === "decision") {
+    current = node.condition[lastAnswer];
+    render();
+  }
+
+
+  else if (node.type === "summary") {
+    textDiv.innerHTML = `
+      <div class="summary">
+        ${node.text}
+        <br><br>
+        <strong>Your Choices:</strong><br>
+        ${Object.values(state).join(" → ")}
+      </div>
+    `;
+
+    let btn = document.createElement("button");
+    btn.className = "continue-btn";
+    btn.innerText = "Finish";
+
+    btn.onclick = () => {
+      current = node.next;
+      render();
+    };
+
+    optionsDiv.appendChild(btn);
+  }
+
+
+  else {
+    let btn = document.createElement("button");
+    btn.className = "continue-btn";
+    btn.innerText = "Continue";
+
+    btn.onclick = () => {
+      if (node.next) {
+        current = node.next;
+        render();
+      }
+    };
+
+    optionsDiv.appendChild(btn);
+  }
+}
+</script>
+
+</body>
+</html>

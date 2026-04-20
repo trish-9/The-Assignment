@@ -1,0 +1,120 @@
+{
+  "nodes": [
+
+    {"id":"START","type":"start","text":"Good evening. Let's reflect on your day.","next":"Q1"},
+
+    {"id":"Q1","type":"question","text":"How would you describe your day?","options":["Productive","Tough","Mixed","Frustrating"],"next":"D1"},
+
+    {"id":"D1","type":"decision","condition":{
+      "Productive":"Q2A",
+      "Mixed":"Q2A",
+      "Tough":"Q2B",
+      "Frustrating":"Q2B"
+    }},
+
+    {"id":"Q2A","type":"question","text":"What went well today?","options":["Planning","Effort","Team support","Adaptation"],"next":"D2"},
+    {"id":"Q2B","type":"question","text":"When problems came up, what did you do?","options":["Tried to solve it","Waited","Got frustrated","Ignored it"],"next":"D2"},
+
+    {"id":"D2","type":"decision","condition":{
+      "Planning":"Q3A",
+      "Effort":"Q3A",
+      "Team support":"Q3B",
+      "Adaptation":"Q3A",
+      "Tried to solve it":"Q3A",
+      "Waited":"Q3C",
+      "Got frustrated":"Q3C",
+      "Ignored it":"Q3C"
+    }},
+
+    {"id":"Q3A","type":"question","text":"Did you consciously put in effort?","options":["Yes","Somewhat","No"],"next":"R1A"},
+    {"id":"Q3B","type":"question","text":"How much did the team contribute?","options":["High","Medium","Low"],"next":"R1B"},
+    {"id":"Q3C","type":"question","text":"Could you have reacted better?","options":["Yes","No","Maybe"],"next":"R1C"},
+
+    {"id":"R1A","type":"reflection","text":"You recognized the impact of your actions. This shows a strong sense of control.","next":"Q4"},
+    {"id":"R1B","type":"reflection","text":"The team played a role, but your contribution mattered as well.","next":"Q4"},
+    {"id":"R1C","type":"reflection","text":"The situation was difficult, but there were still choices within your control.","next":"Q4"},
+
+    {"id":"Q4","type":"question","text":"In a similar situation next time, what would you do?","options":["Plan better","Take control","Ask for help","Do the same"],"next":"R1D"},
+    {"id":"R1D","type":"reflection","text":"Thinking ahead is what drives growth.","next":"BR1"},
+
+    {"id":"BR1","type":"bridge","text":"Now let's shift to what you contributed today.","next":"Q5"},
+
+    {"id":"Q5","type":"question","text":"What did you contribute today?","options":["Helped someone","Extra effort","Did my usual work","Nothing"],"next":"D3"},
+
+    {"id":"D3","type":"decision","condition":{
+      "Helped someone":"Q6A",
+      "Extra effort":"Q6A",
+      "Did my usual work":"Q6B",
+      "Nothing":"Q6B"
+    }},
+
+    {"id":"Q6A","type":"question","text":"Why did you choose to help?","options":["For the team","For growth","Out of habit","To create impact"],"next":"D4"},
+    {"id":"Q6B","type":"question","text":"Did you expect something in return?","options":["Yes","No","Sometimes"],"next":"D4"},
+
+    {"id":"D4","type":"decision","condition":{
+      "For the team":"Q7A",
+      "For growth":"Q7A",
+      "Out of habit":"Q7A",
+      "To create impact":"Q7A",
+      "Yes":"Q7B",
+      "No":"Q7C",
+      "Sometimes":"Q7B"
+    }},
+
+    {"id":"Q7A","type":"question","text":"Could you have contributed more?","options":["Yes","No","Maybe"],"next":"R2A"},
+    {"id":"Q7B","type":"question","text":"What made you expect something?","options":["Recognition","Support","Fairness"],"next":"R2B"},
+    {"id":"Q7C","type":"question","text":"Did you consciously avoid contributing more?","options":["Yes","No","Maybe"],"next":"R2C"},
+
+    {"id":"R2A","type":"reflection","text":"Contribution leads to long-term growth.","next":"Q8"},
+    {"id":"R2B","type":"reflection","text":"Expectation often leads to frustration.","next":"Q8"},
+    {"id":"R2C","type":"reflection","text":"Staying neutral may feel safe, but it limits growth.","next":"Q8"},
+
+    {"id":"Q8","type":"question","text":"What will you improve tomorrow?","options":["Help more","Take initiative","Stay the same"],"next":"R2D"},
+    {"id":"R2D","type":"reflection","text":"Small improvements create meaningful change.","next":"BR2"},
+
+    {"id":"BR2","type":"bridge","text":"Now let's look at where your focus was.","next":"Q9"},
+
+    {"id":"Q9","type":"question","text":"Where was your focus today?","options":["Myself","Team","Colleague","Customer"],"next":"D5"},
+
+    {"id":"D5","type":"decision","condition":{
+      "Myself":"Q10A",
+      "Team":"Q10B",
+      "Colleague":"Q10B",
+      "Customer":"Q10C"
+    }},
+
+    {"id":"Q10A","type":"question","text":"Could you have considered others more?","options":["Yes","No","Maybe"],"next":"D6"},
+    {"id":"Q10B","type":"question","text":"How did you support the team?","options":["Helped","Guided","Put effort","Did nothing"],"next":"D6"},
+    {"id":"Q10C","type":"question","text":"What was the customer impact?","options":["High","Medium","Low"],"next":"D6"},
+
+    {"id":"D6","type":"decision","condition":{
+      "Yes":"Q11A",
+      "Maybe":"Q11A",
+      "Helped":"Q11A",
+      "Guided":"Q11A",
+      "Put effort":"Q11A",
+      "No":"Q11B",
+      "Did nothing":"Q11B",
+      "Low":"Q11B",
+      "High":"Q11C",
+      "Medium":"Q11C"
+    }},
+
+    {"id":"Q11A","type":"question","text":"Can you think more broadly?","options":["Yes","No","Maybe"],"next":"R3A"},
+    {"id":"Q11B","type":"question","text":"Was your focus too limited?","options":["Yes","No","Maybe"],"next":"R3B"},
+    {"id":"Q11C","type":"question","text":"Did you understand the impact of your work?","options":["Yes","No","Maybe"],"next":"R3C"},
+
+    {"id":"R3A","type":"reflection","text":"Thinking broadly is a sign of leadership.","next":"Q12"},
+    {"id":"R3B","type":"reflection","text":"A narrow focus is natural, but expanding it leads to growth.","next":"Q12"},
+    {"id":"R3C","type":"reflection","text":"Understanding impact strengthens your effectiveness.","next":"Q12"},
+
+    {"id":"Q12","type":"question","text":"How will you improve your focus tomorrow?","options":["Think about the team","Think about impact","Stay the same"],"next":"R3D"},
+
+    {"id":"R3D","type":"reflection","text":"Changing your perspective can change your results.","next":"SUMMARY"},
+
+    {"id":"SUMMARY","type":"summary","text":"Today you reflected on your actions, contributions, and focus. Tomorrow is an opportunity to improve further.","next":"END"},
+
+    {"id":"END","type":"end","text":"Good job. See you tomorrow."}
+
+  ]
+}
